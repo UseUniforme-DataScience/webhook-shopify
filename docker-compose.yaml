@@ -1,0 +1,7 @@
+services:
+  webhook-shopify:
+    build: .
+    image: webhook-shopify
+    container_name: webhook-shopify
+    ports:
+      - "9100:9100"
