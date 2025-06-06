@@ -5,7 +5,7 @@ ENV TZ=America/Sao_Paulo
 
 # Instala tzdata e outras dependências essenciais
 RUN apt-get update && \
-    apt-get install -y tzdata && \
+    apt-get install -y tzdata nano git && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -20,9 +20,16 @@ COPY . .
 RUN python -m venv /opt/venv
 
 # Ativa a venv no PATH do container
-ENV PATH="/use-api/venv/bin:$PATH"
+ENV PATH="/webhook-shopify/venv/bin:$PATH"
 
 # Instala dependências dentro da venv
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9100"]
+# Define o caminho raiz para módulos Python
+ENV PYTHONPATH=/webhook-shopify
+
+# Define variáveis de ambiente
+ENV PYTHONUNBUFFERED=1	
+
+# Comando de execução (gunicorn com uvicorn)
+CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:api", "--bind", "0.0.0.0:9000"]
