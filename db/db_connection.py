@@ -3,7 +3,6 @@ from datetime import datetime
 import json
 from google.cloud import bigquery
 from google.oauth2 import service_account
-import pandas as pd
 
 with open("config.json") as f:
     service_account_info = json.load(f)
@@ -20,7 +19,7 @@ class BigQuery:
     @staticmethod
     async def run_query_and_return(
         query: str, job_config: bigquery.QueryJobConfig = None
-    ) -> pd.DataFrame:
+    ):
         def run_query():
             start_time = datetime.now()
             job = bq_client.query(query=query, job_config=job_config).result()

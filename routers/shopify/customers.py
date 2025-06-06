@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request
 from services.shopify.customers import ShopifyCustomers
 
 shopify_customers = APIRouter(prefix="/shopify")
