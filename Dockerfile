@@ -16,20 +16,21 @@ WORKDIR /app
 # Copia os arquivos da raiz do projeto local para o container
 COPY . .
 
-# Cria venv interna (exclusiva do container)
+# Cria venv interna
 RUN python -m venv /opt/venv
 
 # Ativa a venv no PATH do container
-ENV PATH="/webhook-shopify/venv/bin:$PATH"
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Instala dependências dentro da venv
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Define o caminho raiz para módulos Python
-ENV PYTHONPATH=/webhook-shopify
+ENV PYTHONPATH=/app
 
-# Define variáveis de ambiente
-ENV PYTHONUNBUFFERED=1	
+# Variáveis de ambiente padrão do Python
+ENV PYTHONUNBUFFERED=1
 
-# Comando de execução (gunicorn com uvicorn)
-CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:9000"]
+# Comando de execução com Gunicorn + UvicornWorker
+CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:9000", "--log-level", "info", "--access-logfile", "-", "--error-logfile", "-"]
