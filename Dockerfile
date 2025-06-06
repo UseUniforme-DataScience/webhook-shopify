@@ -33,4 +33,5 @@ ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
 # Comando de execução com Gunicorn + UvicornWorker
-CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:9000", "--log-level", "info", "--access-logfile", "-", "--error-logfile", "-"]
+# CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:9000", "--log-level", "info", "--access-logfile", "-", "--error-logfile", "-"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
