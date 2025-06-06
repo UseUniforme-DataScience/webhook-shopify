@@ -32,4 +32,4 @@ ENV PYTHONPATH=/webhook-shopify
 ENV PYTHONUNBUFFERED=1	
 
 # Comando de execução (gunicorn com uvicorn)
-CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:api", "--bind", "0.0.0.0:9000"]
+CMD ["gunicorn", "-w", "4", "--threads", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:9000"]
